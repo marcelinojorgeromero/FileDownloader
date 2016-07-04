@@ -32,10 +32,10 @@ namespace FileDownloader
             TxtUrl.Text = @"";
 
             var antFolder = @"Ant Videos\";
-            var downloadFolder = $@"{GetDownloadFolderPath()}\"; //@"\\Mac\Home\Downloads\Ant Videos\";
+            var downloadFolder = $@"{GetDownloadFolderPath()}\";
 
             var fullAntFolder = Path.Combine(downloadFolder, antFolder);
-            TxtFolderPath.Text = Directory.Exists(fullAntFolder) ? fullAntFolder : Path.Combine(downloadFolder, @"Pluralsight\");
+            TxtFolderPath.Text = Directory.Exists(fullAntFolder) ? fullAntFolder : Path.Combine(downloadFolder, @"Videos\");
             TxtFileTitle.Text = @".mp4";
 
             BtnDownload.Visibility = Visibility.Visible;
@@ -97,12 +97,7 @@ namespace FileDownloader
             var url = TxtUrl.Text;
             if (!IsUrlValid(url))
             {
-                LblDownloadStatus.Text = "Download URL is not valid!";
-                TaskScheduler.Execute(() =>
-                {
-                    LblDownloadStatus.Text = string.Empty;
-                }, 2000);
-
+                UpdateStatusBar("Download URL is not valid!");
                 return;
             }
 
@@ -114,11 +109,7 @@ namespace FileDownloader
                 switch (result)
                 {
                     case MessageBoxResult.Cancel:
-                        LblDownloadStatus.Text = "Download Canceled";
-                        TaskScheduler.Execute(() =>
-                        {
-                            LblDownloadStatus.Text = string.Empty;
-                        }, 2000);
+                        UpdateStatusBar("Download Canceled");
                         return;
                     case MessageBoxResult.Yes:
                         fullPath = GetUniqueFilePath(fullPath);
@@ -131,12 +122,7 @@ namespace FileDownloader
                         catch (Exception ex)
                         {
                             LogManager.Instance().Error(ex);
-                            LblDownloadStatus.Text = $"Error: {ex.Message}";
-                            TaskScheduler.Execute(() =>
-                            {
-                                LblDownloadStatus.Text = string.Empty;
-                            }, 2000);
-
+                            UpdateStatusBar($"Error: {ex.Message}");
                             return;
                         }
                         break;
@@ -187,11 +173,7 @@ namespace FileDownloader
 
         private void DownloadCancelled(object sender, CancelEventArgs eventArgs)
         {
-            LblDownloadStatus.Text = "Download cancelled.";
-            TaskScheduler.Execute(() =>
-            {
-                LblDownloadStatus.Text = string.Empty;
-            }, 2000);
+            UpdateStatusBar("Download cancelled.");
         }
 
         private void DownloadError(object sender, ErrorEventArgs args)
@@ -263,7 +245,13 @@ namespace FileDownloader
 
         private void BtnOpenFile_OnClick(object sender, RoutedEventArgs e)
         {
-
+            var filePath = CombineFilePathFromTxtBoxes();
+            if (!File.Exists(filePath))
+            {
+                UpdateStatusBar("File does not exist!");
+                return;
+            }
+            Process.Start(filePath);
         }
 
         private string CombineFilePathFromTxtBoxes()
@@ -279,6 +267,15 @@ namespace FileDownloader
         {
             Uri uriResult;
             return Uri.TryCreate(source, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttp;
+        }
+
+        private void UpdateStatusBar(string msg)
+        {
+            LblDownloadStatus.Text = msg;
+            TaskScheduler.Execute(() =>
+            {
+                LblDownloadStatus.Text = string.Empty;
+            }, 2000);
         }
     }
 }
