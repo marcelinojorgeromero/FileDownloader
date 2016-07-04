@@ -61,23 +61,6 @@ namespace FileDownloader
                 await downloadingFileTask;
                 _client.Dispose();
                 return _fileDownloadedSuccessfully && File.Exists(_fullPathWhereToSave);
-
-                //using (var client = new WebClientEnhanced(TimeSpan.FromSeconds(timeout).Milliseconds))
-                //{
-                //    var url = new Uri(_url);
-                //    client.DownloadProgressChanged += DownloadProgressChanged;
-                //    client.DownloadCompletedSuccessfully += DownloadCompletedSuccessfully;
-                //    client.DownloadCancelled += DownloadCancelled;
-                //    client.DownloadError += DownloadError;
-                //    client.DownloadTimeout += DownloadTimeout;
-
-                //    client.DownloadCancelled += LocalDownloadCancelledEvent;
-                //    client.DownloadError += LocalDownloadErrorEvent;
-                //    client.DownloadTimeout += LocalDownloadTimeoutEvent;
-                //    var downloadingFileTask = client.DownloadFileTaskAsync(url, _fullPathWhereToSave);
-                //    await downloadingFileTask;
-                //    return _fileDownloadedSuccessfully && File.Exists(_fullPathWhereToSave);
-                //}
             }
             catch (Exception ex)
             {
