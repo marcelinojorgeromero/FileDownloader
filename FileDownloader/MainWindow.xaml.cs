@@ -95,10 +95,18 @@ namespace FileDownloader
         private async void BtnDownload_OnClick(object sender, RoutedEventArgs e)
         {
             var url = TxtUrl.Text;
-            var folderPath = TxtFolderPath.Text;
-            var fileName = TxtFileTitle.Text;
+            if (!IsUrlValid(url))
+            {
+                LblDownloadStatus.Text = "Download URL is not valid!";
+                TaskScheduler.Execute(() =>
+                {
+                    LblDownloadStatus.Text = string.Empty;
+                }, 2000);
 
-            var fullPath = Path.Combine(folderPath, fileName);
+                return;
+            }
+
+            var fullPath = CombineFilePathFromTxtBoxes();
 
             if (File.Exists(fullPath))
             {
@@ -248,9 +256,29 @@ namespace FileDownloader
 
         private void BtnCancel_OnClick(object sender, RoutedEventArgs e)
         {
+            _fileDownloader.CancelDownload();
             BtnDownload.Visibility = Visibility.Visible;
             BtnCancel.Visibility = Visibility.Hidden;
-            _fileDownloader.CancelDownload();
+        }
+
+        private void BtnOpenFile_OnClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private string CombineFilePathFromTxtBoxes()
+        {
+            var folderPath = TxtFolderPath.Text;
+            var fileName = TxtFileTitle.Text;
+
+            var fullPath = Path.Combine(folderPath, fileName);
+            return fullPath;
+        }
+
+        public bool IsUrlValid(string source)
+        {
+            Uri uriResult;
+            return Uri.TryCreate(source, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttp;
         }
     }
 }

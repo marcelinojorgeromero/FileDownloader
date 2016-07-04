@@ -36,6 +36,9 @@
             <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Name="BtnOpenFolderLocation" Margin="3" Padding="5" Click="BtnOpenFolderLocation_OnClick">
                 <fa:ImageAwesome Icon="Eye" VerticalAlignment="Center" HorizontalAlignment="Left" Height="Auto" />
             </Button>
+            <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Name="BtnOpenFile" Margin="3" Padding="5" Click="BtnOpenFile_OnClick">
+                <fa:ImageAwesome Icon="Play" VerticalAlignment="Center" HorizontalAlignment="Left" Height="Auto" />
+            </Button>
             <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110"></ColumnDefinition>
