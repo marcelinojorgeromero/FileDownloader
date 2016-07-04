@@ -70,10 +70,25 @@ namespace FileDownloader
             }
         }
 
-        public void CancelDownload()
+        public void CancelDownload(bool deleteFile = true)
         {
             _client.CancelAsync();
-            if (File.Exists(_fullPathWhereToSave)) File.Delete(_fullPathWhereToSave);
+            if (deleteFile) DeleteDownloadedFileIfExists();
+        }
+
+        public bool DeleteDownloadedFileIfExists()
+        {
+            try
+            {
+                if (File.Exists(_fullPathWhereToSave)) File.Delete(_fullPathWhereToSave);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                LogManager.Instance().Error(exception);
+
+                return false;
+            }
         }
 
         private void LocalDownloadTimeoutEvent(object sender, ErrorEventArgs eventArgs)

@@ -45,7 +45,7 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="25" Width="100" Content="Download" Name="BtnDownload" Margin="3" Padding="5" Click="BtnDownload_OnClick"></Button>
-                <Button Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="25" Width="100" Content="Download" Name="BtnCancel" Margin="3" Padding="5" Click="BtnCancel_OnClick"></Button>
+                <Button Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="25" Width="100" Content="Cancel" Name="BtnCancel" Margin="3" Padding="5" Click="BtnCancel_OnClick"></Button>
                 <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="40">
                     <ProgressBar VerticalAlignment="Center" Height="25" HorizontalAlignment="Stretch" Minimum="0" Maximum="100" Value="0" Name="PbDownloadStatus" Margin="3"></ProgressBar>
                     <TextBlock Text="{Binding ElementName=PbDownloadStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />

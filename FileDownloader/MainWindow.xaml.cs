@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -150,20 +152,13 @@ namespace FileDownloader
 
         private void DownloadCompletedSuccessfully(object sender, EventArgs eventArgs)
         {
+            BtnDownload.Visibility = Visibility.Visible;
+            BtnCancel.Visibility = Visibility.Hidden;
+
             LblDownloadStatus.Text = "Download finished";
 
-            Action<long> updateDownloadStatusBar = value =>
-            {
-                PbDownloadStatus.Value = 100 - (value + 1);
-            };
-            var synchContext = new SynchronizationContextScheduler(SynchronizationContext.Current);
-            var observableTmr = Observable
-                .Interval(TimeSpan.FromMilliseconds(10), TaskPoolScheduler.Default)
-                .Take(100)
-                .Delay(TimeSpan.FromMilliseconds(2000))
-                .ObserveOn(synchContext);
-            observableTmr.Subscribe(updateDownloadStatusBar, () => LblDownloadStatus.Text = "");
-
+            ResetProgressBar(true);
+            
             //Scheduler.Execute(() =>
             //{
             //    var observableTmr = Observable.Interval(TimeSpan.FromMilliseconds(100)).Take(100);
@@ -174,16 +169,29 @@ namespace FileDownloader
         private void DownloadCancelled(object sender, CancelEventArgs eventArgs)
         {
             UpdateStatusBar("Download cancelled.");
+            ResetProgressBar();
         }
 
         private void DownloadError(object sender, ErrorEventArgs args)
         {
-            LblDownloadStatus.Text = $"Download error: {args.GetException().Message}";
+            BtnDownload.Visibility = Visibility.Visible;
+            BtnCancel.Visibility = Visibility.Hidden;
+
+            UpdateStatusBar($"Download error: {args.GetException().Message}");
+            ResetProgressBar();
         }
 
         private void DownloadTimeout(object sender, ErrorEventArgs args)
         {
-            LblDownloadStatus.Text = $"Download timeout: {args.GetException().Message}";
+            BtnDownload.Visibility = Visibility.Visible;
+            BtnCancel.Visibility = Visibility.Hidden;
+
+            var isFileDeletedSuccussfully = _fileDownloader.DeleteDownloadedFileIfExists();
+            var statusMsg = isFileDeletedSuccussfully 
+                ? $"Download timeout: {args.GetException().Message}" 
+                : "The download has timeout and the file could not be deleted. Check the log file for more.";
+            UpdateStatusBar(statusMsg);
+            ResetProgressBar();
         }
 
         private void TxtFileTitle_OnGotFocus(object sender, RoutedEventArgs e)
@@ -276,6 +284,44 @@ namespace FileDownloader
             {
                 LblDownloadStatus.Text = string.Empty;
             }, 2000);
+        }
+
+        ///// <summary>
+        ///// Queue of messages to show up
+        ///// </summary>
+        ///// <param name="msgs"></param>
+        //private void UpdateStatusBar(IEnumerable<string> msgs)
+        //{
+        //    var msgEnumerable = msgs as IList<string> ?? msgs.ToList();
+        //    msgEnumerable.Add(string.Empty);
+        //    var msgLst = msgEnumerable.GetEnumerator();
+        //    Action<long> updateProressBar = value =>
+        //    {
+        //        msgLst.MoveNext();
+        //        LblDownloadStatus.Text = msgLst.Current;
+        //    };
+        //    updateProressBar(0);
+        //    var synchContext = new SynchronizationContextScheduler(SynchronizationContext.Current);
+        //    var observableTmr = Observable
+        //        .Interval(TimeSpan.FromSeconds(2), TaskPoolScheduler.Default)
+        //        .Take(msgEnumerable.Count - 1)
+        //        .ObserveOn(synchContext);
+        //    observableTmr.Subscribe(updateProressBar);
+        //}
+
+        private void ResetProgressBar(bool clearStatusText = false)
+        {
+            Action<long> updateProressBar = value =>
+            {
+                PbDownloadStatus.Value = 100 - (value + 1);
+            };
+            var synchContext = new SynchronizationContextScheduler(SynchronizationContext.Current);
+            var observableTmr = Observable
+                .Interval(TimeSpan.FromMilliseconds(10), TaskPoolScheduler.Default)
+                .Take(100)
+                .Delay(TimeSpan.FromMilliseconds(2000))
+                .ObserveOn(synchContext);
+            observableTmr.Subscribe(updateProressBar, () => { if (clearStatusText) LblDownloadStatus.Text = string.Empty; } );
         }
     }
 }
