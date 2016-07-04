@@ -1,0 +1,58 @@
+﻿<Window x:Class="FileDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileDownloader"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="File downloader" Height="200" Width="600" 
+        WindowStartupLocation="CenterScreen"
+        Icon="Icons/Mag1cwind0w-Colorful-Morning-CM-Downloads.ico">
+    <DockPanel 
+        HorizontalAlignment="Stretch" 
+        VerticalAlignment="Stretch" 
+        Height="Auto" 
+        Margin="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Content="Url:" Name="LblUrl" Height="26" Margin="0,7,0.222,7"/>
+            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="Folder:" Name="LblFolderPath" Height="26" Margin="0,7,0.222,7"/>
+            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Content="File title:" Name="LblFileTitle" Height="26" Margin="0,7,0.222,7"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="2.778,3,3.333,3" Name="TxtUrl" GotFocus="TxtUrl_OnGotFocus" PreviewMouseDown="TxtBoxes_OnPreviewMouseDown"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="2.778,3,3.333,3" Name="TxtFolderPath" GotFocus="TxtFolderPath_OnGotFocus" PreviewMouseDown="TxtBoxes_OnPreviewMouseDown"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="2.778,3,3.333,3" Name="TxtFileTitle" GotFocus="TxtFileTitle_OnGotFocus" PreviewMouseDown="TxtBoxes_OnPreviewMouseDown"/>
+            <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Name="BtnOpenFolderLocation" Margin="3" Padding="5" Click="BtnOpenFolderLocation_OnClick">
+                <fa:ImageAwesome Icon="Eye" VerticalAlignment="Center" HorizontalAlignment="Left" Height="Auto" />
+            </Button>
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="25" Width="100" Content="Download" Name="BtnDownload" Margin="3" Padding="5" Click="BtnDownload_OnClick"></Button>
+                <Button Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="25" Width="100" Content="Download" Name="BtnCancel" Margin="3" Padding="5" Click="BtnCancel_OnClick"></Button>
+                <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="40">
+                    <ProgressBar VerticalAlignment="Center" Height="25" HorizontalAlignment="Stretch" Minimum="0" Maximum="100" Value="0" Name="PbDownloadStatus" Margin="3"></ProgressBar>
+                    <TextBlock Text="{Binding ElementName=PbDownloadStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </Grid>
+            <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Height="30" Name="SbAppStatus">
+                <StatusBarItem>
+                    <TextBlock Name="LblDownloadStatus" />
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </DockPanel>
+</Window>

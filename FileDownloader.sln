@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDownloader", "FileDownloader\FileDownloader.csproj", "{771FB0A0-221A-4BBA-82D7-8FF4631D3EC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{47800AB4-0320-4241-BCA6-A14A2AA98D46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Log", "Infrastructure\Infrastructure.Log\Infrastructure.Log.csproj", "{36593F55-F584-4753-8FC0-DBF9D8864352}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{771FB0A0-221A-4BBA-82D7-8FF4631D3EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771FB0A0-221A-4BBA-82D7-8FF4631D3EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771FB0A0-221A-4BBA-82D7-8FF4631D3EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771FB0A0-221A-4BBA-82D7-8FF4631D3EC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36593F55-F584-4753-8FC0-DBF9D8864352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36593F55-F584-4753-8FC0-DBF9D8864352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36593F55-F584-4753-8FC0-DBF9D8864352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36593F55-F584-4753-8FC0-DBF9D8864352}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{36593F55-F584-4753-8FC0-DBF9D8864352} = {47800AB4-0320-4241-BCA6-A14A2AA98D46}
+	EndGlobalSection
+EndGlobal
