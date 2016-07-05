@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -177,7 +175,11 @@ namespace FileDownloader
             BtnDownload.Visibility = Visibility.Visible;
             BtnCancel.Visibility = Visibility.Hidden;
 
-            UpdateStatusBar($"Download error: {args.GetException().Message}");
+            var isFileDeletedSuccussfully = _fileDownloader.DeleteDownloadedFileIfExists();
+            var statusMsg = isFileDeletedSuccussfully
+                ? $"Download error: {args.GetException().Message}"
+                : "The download has encountered an error and the file could not be deleted. Check the log file for more.";
+            UpdateStatusBar(statusMsg);
             ResetProgressBar();
         }
 
@@ -311,14 +313,16 @@ namespace FileDownloader
 
         private void ResetProgressBar(bool clearStatusText = false)
         {
+            var progressBarValue = (int) Math.Floor(PbDownloadStatus.Value);
+
             Action<long> updateProressBar = value =>
             {
-                PbDownloadStatus.Value = 100 - (value + 1);
+                PbDownloadStatus.Value = progressBarValue - (value + 1);
             };
             var synchContext = new SynchronizationContextScheduler(SynchronizationContext.Current);
             var observableTmr = Observable
                 .Interval(TimeSpan.FromMilliseconds(10), TaskPoolScheduler.Default)
-                .Take(100)
+                .Take(progressBarValue)
                 .Delay(TimeSpan.FromMilliseconds(2000))
                 .ObserveOn(synchContext);
             observableTmr.Subscribe(updateProressBar, () => { if (clearStatusText) LblDownloadStatus.Text = string.Empty; } );

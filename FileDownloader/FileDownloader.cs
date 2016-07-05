@@ -65,7 +65,7 @@ namespace FileDownloader
             catch (Exception ex)
             {
                 LogManager.Instance().Error(ex);
-                DownloadError?.Invoke(ex, new ErrorEventArgs(new DownloadException(ex.Message, ex.InnerException)));
+                //DownloadError?.Invoke(ex, new ErrorEventArgs(new DownloadException(ex.Message, ex.InnerException)));
                 return false;
             }
         }
